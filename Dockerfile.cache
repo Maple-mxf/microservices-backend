@@ -1,0 +1,7 @@
+FROM gradle:jdk8 as builder
+WORKDIR /app
+COPY . ./
+RUN gradle clean build -x bootJar -i --stacktrace --no-daemon && cp -r /root/.gradle/ /root/gradle_cache
+
+FROM gradle:jdk8
+COPY --from=builder /root/gradle_cache /root/.gradle

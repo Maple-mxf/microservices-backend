@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <appender name="SkyWalkingLog" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
+                <Pattern>${APP_NAME}:${ServerIP}:${ServerPort} %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %tid %t %logger{36}:
+                    %msg%n
+                </Pattern>
+            </layout>
+        </encoder>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.TraceIdPatternLogbackLayout">
+                <Pattern>${APP_NAME}:${ServerIP}:${ServerPort} %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %tid %t %logger{36}:
+                    %msg%n
+                </Pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="SkyWalkingLog"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

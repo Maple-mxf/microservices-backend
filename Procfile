@@ -1,0 +1,1 @@
+web: java -Dserver.port=8090 -jar build/backend-gateway-1.0-boot.jar

@@ -1,0 +1,16 @@
+# syntax = docker/dockerfile:experimental
+FROM gradle:jdk8 as jarBuilder
+WORKDIR /app
+COPY . ./
+RUN --mount=type=cache,target=~/.gradle/,id=gradle_repo_cache,sharing=locked
+ARG MODULE
+RUN gradle :${MODULE}:bootJar -i --stacktrace --no-daemon
+
+FROM alpine:3.13
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositories \
+    && apk add --update --no-cache openjdk8-jre-base \
+    && rm -f /var/cache/apk/*
+WORKDIR /app
+ARG MODULE
+COPY --from=jarBuilder /app/build/${MODULE}-*-boot.jar  ./app.jar
+CMD ["java","-jar","app.jar"]

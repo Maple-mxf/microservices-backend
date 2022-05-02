@@ -1,0 +1,30 @@
+server:
+  port: ${port:8080}
+spring:
+  application:
+    name: BackendRouter
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      enabled: true
+
+      routes:
+        - id: api
+          uri: lb://BackendApi
+          predicates:
+            - Path=/api/**
+          filters:
+            - StripPrefix=1
+    nacos:
+      discovery:
+        server-addr: ${NACOS_ADDRESS:127.0.0.1:8848}
+        service: ${spring.application.name}
+        group: ${NACOS_GROUP:dogfood}
+      config:
+        server-addr: ${NACOS_ADDRESS:127.0.0.1:8848}
+        prefix: ${spring.application.name}
+        group: dogfood
+        file-extension: json
+        extension-configs:
+          - data-id: BackendRouter.json
